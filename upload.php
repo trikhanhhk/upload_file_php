@@ -3,7 +3,6 @@ require('mysql_conect.php');
 if($_SERVER["REQUEST_METHOD"]=="GET"){
     if(isset($_GET['delete_id'])){
         $id = $_GET['delete_id'];
-        mysqli_query($conn, "DELETE FROM images WHERE id='$id'");
         $query = "SELECT images FROM images WHERE id='$id'";
         $result = mysqli_query($conn, $query);
         if($result->num_rows>=1){
@@ -14,6 +13,7 @@ if($_SERVER["REQUEST_METHOD"]=="GET"){
                 }
             }
         }
+        mysqli_query($conn, "DELETE FROM images WHERE id='$id'");
     }
 }
 if($_SERVER["REQUEST_METHOD"]=="POST"){
