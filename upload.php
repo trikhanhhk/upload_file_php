@@ -1,19 +1,19 @@
 <?php
 require('mysql_conect.php');
-if($_SERVER["REQUEST_METHOD"]=="GET"){
+if($_SERVER["REQUEST_METHOD"]=="GET"){ //lấy id để xóa
     if(isset($_GET['delete_id'])){
         $id = $_GET['delete_id'];
         $query = "SELECT images FROM images WHERE id='$id'";
-        $result = mysqli_query($conn, $query);
+        $result = mysqli_query($conn, $query);   // thực hiện lấy ra đường dẫn file
         if($result->num_rows>=1){
             while($row = mysqli_fetch_array($result)){
-                $status = unlink("".$row['images']."");
+                $status = unlink("".$row['images']."");//xóa file trong máy
                 if($status){
                     echo "<script type='text/javascript'>alert('Xóa thành công')</script>";
                 }
             }
         }
-        mysqli_query($conn, "DELETE FROM images WHERE id='$id'");
+        mysqli_query($conn, "DELETE FROM images WHERE id='$id'");//xóa trên database
     }
 }
 if($_SERVER["REQUEST_METHOD"]=="POST"){
@@ -34,11 +34,11 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
         $error['upload_file'] = "Chỉ nhận upload file ảnh";
     }
     //kiểm tra
-    if(file_exists($target_file)){
+    if(file_exists($target_file)){ //kiểm tra file đã tồn tại trên server chưa
         $error['upload_file'] = 'File đã tồn tại trên hệ thông, đổi tên file hoặc thôi upload';
     }
     if(empty($error)){
-        if(move_uploaded_file($_FILES['avatar']['tmp_name'], $target_file)){
+        if(move_uploaded_file($_FILES['avatar']['tmp_name'], $target_file)){ //chuyển file vào folder trên server
             $query = "insert into `images` (images, alt) values ('$target_file', '$title')";
             $result = mysqli_query($conn,$query);
             if($result){
@@ -75,7 +75,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
         }
     ?>
     <?php
-        if(empty($error)){
+        if(empty($error)){ // nếu không có lỗi
     ?>
         <img src="<?php echo $target_file; ?>" alt="">
     <?php
