@@ -2,7 +2,8 @@
 require('mysql_conect.php');
 if($_SERVER["REQUEST_METHOD"]=="GET"){ //lấy id để xóa
     if(isset($_GET['delete_id'])){
-        $id = $_GET['delete_id'];
+        $id = htmlspecialchars($_GET['delete_id']);
+        $id = mysqli_real_escape_string($conn, $id);
         $query = "SELECT images FROM images WHERE id='$id'";
         $result = mysqli_query($conn, $query);   // thực hiện lấy ra đường dẫn file
         if($result->num_rows>=1){
@@ -17,7 +18,7 @@ if($_SERVER["REQUEST_METHOD"]=="GET"){ //lấy id để xóa
     }
 }
 if($_SERVER["REQUEST_METHOD"]=="POST"){
-    $title = $_POST['alt'];
+    $title = mysqli_real_escape_string($_POST['alt']);
     //tạo mảng lưu lỗi
     $error = array();
     //tạo đường dẫn file;
@@ -93,9 +94,9 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             ?>
                 <tr>
                     <td style="width:50px; text-align:center;"><?php echo $i; ?></td>
-                    <td><a href="<?php echo $row['images'] ?>"><img src="<?php echo $row['images']; ?>" alt="" style="width:100px; height:100px;"></a></td>
-                    <td><a href="<?php echo $row['images'] ?>"><?php echo $row['alt']; ?></a></td>
-                    <td><a href="?delete_id=<?php echo $row['id'];?>">Delete</a></td>
+                    <td><a href="<?php echo htmlspecialchars($row['images']) ?>"><img src="<?php echo htmlspecialchars($row['images']); ?>" alt="" style="width:100px; height:100px;"></a></td>
+                    <td><a href="<?php echo htmlspecialchars($row['images']) ?>"><?php echo htmlspecialchars($row['alt']); ?></a></td>
+                    <td><a href="?delete_id=<?php echo htmlspecialchars($row['id']);?>">Delete</a></td>
                 </tr>
         <?php
             }?>
